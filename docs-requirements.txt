@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2023 Leiden University Libraries <beheer@library.leidenuniv.nl>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+mkdocs-ubleiden-theme>=1.0
