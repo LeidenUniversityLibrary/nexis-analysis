@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2023 Leiden University Libraries <beheer@library.leidenuniv.nl>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+site_name: Nexis Uni analysis
+# site_url: 'https://lab.library.universiteitleiden.nl/'
+remote_branch: rendered
+theme:
+  name: ubleiden
+  # font: false
+  language: en
+  features:
+    - navigation.sections
+
+plugins:
+  - search
+  # - htmlproofer
+  # - git-revision-date
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+      baselevel: 2
+  - footnotes
+
+nav:
+  - 'index.md'
