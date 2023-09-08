@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2023-present Leiden University Libraries <beheer@library.leidenuniv.nl>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nexis-analysis"
+description = "Analyse data from Nexis Uni"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "GPL-3.0-or-later"
+keywords = []
+authors = [
+  { name = "Ben Companjen", email = "ben@companjen.name" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "click~=8.1.3",
+]
+
+
+[project.urls]
+Documentation = "https://leidenuniversitylibrary.github.io/nexis-analysis/"
+Issues = "https://github.com/LeidenUniversityLibrary/nexis-analysis/issues"
+Source = "https://github.com/LeidenUniversityLibrary/nexis-analysis"
+
+# [project.scripts]
+
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest~=7.4",
+  "pytest-cov~=4.1",
+]
+[tool.hatch.envs.test.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=nexis_analysis --cov=tests"
+no-cov = "cov --no-cov"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["38", "39", "310", "311"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = []
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
