@@ -21,7 +21,7 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
         output_dir.mkdir(parents=True)
     for item in input_dir.glob("**/*.docx"):
         # print(item)
-        file_hash = hashlib.shake_128(item.read_bytes()).hexdigest(40)
+        file_hash = hashlib.sha256(item.read_bytes()).hexdigest()
         name_hash = hashlib.shake_128(str(item).encode("utf-8")).hexdigest(20)
         conversion_result = subprocess.run([
             pandoc_cmd,
