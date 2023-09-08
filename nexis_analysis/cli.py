@@ -3,6 +3,7 @@
 """Analyse documents retrieved from Nexis Uni"""
 import click
 from collections import defaultdict
+import csv
 import hashlib
 import pathlib
 import shutil
@@ -22,27 +23,31 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
         output_dir.mkdir(parents=True)
     results = []
     file_hashes = defaultdict(list)
-    for item in input_dir.glob("**/*.docx"):
-        # print(item)
-        file_hash = hashlib.sha256(item.read_bytes()).hexdigest()
-        name_hash = hashlib.shake_128(str(item).encode("utf-8")).hexdigest(20)
-        conversion_result = subprocess.run([
-            pandoc_cmd,
-            "--wrap=preserve",
-            "-t",
-            "gfm",
-            "-o",
-            f"{output_dir / name_hash}.md",
-            item,
-        ])
-        # print(name_hash, conversion_result.returncode)
-        results.append({
-            "name_hash": name_hash,
-            "file_name": str(item),
-            "file_sha256": file_hash,
-            "conversion_rc": conversion_result.returncode,
-        })
-        file_hashes[file_hash].append(str(item))
+    summary_path = output_dir / "summary.csv"
+    summary_field_names = ["name_hash", "source_file_name", "source_file_sha256", "target_file_name", "conversion_rc"]
+    with summary_path.open(mode="w", encoding="utf-8", newline="") as summary_file:
+        writer = csv.DictWriter(summary_file, summary_field_names)
+        writer.writeheader()
+        for item in input_dir.glob("**/*.docx"):
+            file_hash = hashlib.sha256(item.read_bytes()).hexdigest()
+            name_hash = hashlib.shake_128(str(item).encode("utf-8")).hexdigest(20)
+            conversion_result = subprocess.run([
+                pandoc_cmd,
+                "--wrap=preserve",
+                "-t",
+                "gfm",
+                "-o",
+                f"{output_dir / name_hash}.md",
+                item,
+            ])
+            writer.writerow({
+                "name_hash": name_hash,
+                "source_file_name": str(item),
+                "source_file_sha256": file_hash,
+                "target_file_name": f"{name_hash}.md"
+                "conversion_rc": conversion_result.returncode,
+            })
+            file_hashes[file_hash].append(str(item))
     for fh in file_hashes:
         if len(file_hashes[fh]) > 1:
             print("Duplicate file contents:")
