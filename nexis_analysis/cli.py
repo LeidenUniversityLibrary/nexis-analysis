@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Analyse documents retrieved from Nexis Uni"""
 import click
+from collections import defaultdict
 import hashlib
 import pathlib
 import shutil
@@ -19,6 +20,8 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
         raise Exception("pandoc could not be found")
     if not output_dir.exists():
         output_dir.mkdir(parents=True)
+    results = []
+    file_hashes = defaultdict(list)
     for item in input_dir.glob("**/*.docx"):
         # print(item)
         file_hash = hashlib.sha256(item.read_bytes()).hexdigest()
@@ -32,7 +35,20 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
             f"{output_dir / name_hash}.md",
             item,
         ])
-        print(name_hash, conversion_result.returncode)
+        # print(name_hash, conversion_result.returncode)
+        results.append({
+            "name_hash": name_hash,
+            "file_name": str(item),
+            "file_sha256": file_hash,
+            "conversion_rc": conversion_result.returncode,
+        })
+        file_hashes[file_hash].append(str(item))
+    for fh in file_hashes:
+        if len(file_hashes[fh]) > 1:
+            print("Duplicate file contents:")
+            for name in file_hashes[fh]:
+                print("   -", name)
+    print(f"Converted {len(file_hashes)} files")
 
 
 
