@@ -67,3 +67,16 @@ def test_get_date(document, date):
 )
 def test_get_date_str(document, date_str):
     assert extract.get_date_str(document) == date_str
+
+@pytest.mark.parametrize(
+    "document,byline",
+    [
+        (load_doc("test1.md"), "DOOR MARC VAN DEN EERENBEEMT"),
+        (load_doc("test2.md"), None),
+    ]
+)
+def test_get_byline(document, byline):
+    if byline is None:
+        assert extract.get_byline(document) is None
+    else:
+        assert extract.get_byline(document) == byline

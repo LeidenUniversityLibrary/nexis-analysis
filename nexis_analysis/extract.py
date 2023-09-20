@@ -55,3 +55,8 @@ def get_date_str(raw_source):
     date = re.search(r"(\d\d? \w+ \d{4} \w+dag)", raw_source)
     if date:
         return date.group(1)
+
+def get_byline(raw_source):
+    byline = re.search(r"\*\*Byline:\*\*\s(.+)\n", raw_source)
+    if byline:
+        return byline.group(1)
