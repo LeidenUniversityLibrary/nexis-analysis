@@ -2,10 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Extract information from documents"""
 import datetime
-from . import document
 import pathlib
 import re
-from typing import Union
 
 month_by_name = {
     "januari": 1,
@@ -22,28 +20,15 @@ month_by_name = {
     "december": 12,
 }
 
-
-
-def doc_from_file(file_name: Union[str, pathlib.Path]) -> document.NexisDocument:
-    """Create a NexisDocument by loading a GFM file"""
-    with open(file_name, "r", encoding="utf-8") as fh:
-        raw_source = fh.read()
-    doc = document.NexisDocument(raw_source)
-    doc.body = get_body(raw_source)
-    doc.title = get_title(raw_source)
-    doc.date = get_date(raw_source)
-    doc.date_str = get_date_str(raw_source)
-    doc.length = get_length(raw_source)
-    return doc
-
-
 def get_body(raw_source):
-
-    body_start = """**Body**"""
-    body_start_index = raw_source.index(body_start) + len(body_start)
-    body_end = """**Load-Date:**"""
-    body_end_index = raw_source.index(body_end)
-    return raw_source[body_start_index:body_end_index].strip()
+    try:
+        body_start = """**Body**"""
+        body_start_index = raw_source.index(body_start) + len(body_start)
+        body_end = """**Load-Date:**"""
+        body_end_index = raw_source.index(body_end)
+        return raw_source[body_start_index:body_end_index].strip()
+    except ValueError:
+        return None
 
 
 def get_title(raw_source):

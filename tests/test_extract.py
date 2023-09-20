@@ -21,9 +21,6 @@ def test_get_body(doc):
     assert body
     assert "**Body**" not in body
 
-def test_doc_from_file():
-    doc = extract.doc_from_file(get_path("test1.md"))
-    assert doc.body is not None
 
 @pytest.mark.parametrize(
     "document,title",
