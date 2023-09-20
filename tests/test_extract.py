@@ -2,21 +2,28 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Test that metadata are correctly extracted from documents"""
 import datetime
-from nexis_analysis import document
+from nexis_analysis import extract
 import pathlib
 import pytest
 
-def load_doc(path):
-    return document.NexisDocument(str(pathlib.Path("tests/fixtures", path).resolve()))
+def get_path(relative_path):
+    return pathlib.Path("tests/fixtures", relative_path).resolve()
+
+def load_doc(path: str) -> str:
+    return get_path(path).read_text(encoding="utf-8")
 
 @pytest.fixture(params=["test1.md", "test2.md"])
 def doc(request):
     yield load_doc(request.param)
 
+def test_get_body(doc):
+    body = extract.get_body(doc)
+    assert body
+    assert "**Body**" not in body
 
-def test_body(doc):
-    assert doc.body
-    assert "**Body**" not in doc.body
+def test_doc_from_file():
+    doc = extract.doc_from_file(get_path("test1.md"))
+    assert doc.body is not None
 
 @pytest.mark.parametrize(
     "document,title",
@@ -25,10 +32,11 @@ def test_body(doc):
         (load_doc("test2.md"), "Schaduwbankieren valt mee, vindt Nederlandsche Bank"),
     ]
 )
-def test_title(document, title):
-    assert document.title
-    assert "**" not in document.title
-    assert document.title == title
+def test_get_title(document, title):
+    doc_title = extract.get_title(document)
+    assert doc_title
+    assert "**" not in doc_title
+    assert doc_title == title
 
 @pytest.mark.parametrize(
     "document,length",
@@ -37,18 +45,28 @@ def test_title(document, title):
         (load_doc("test2.md"), 245),
     ]
 )
-def test_length(document, length):
-    assert document.length
-    assert isinstance(document.length, int)
-    assert document.length == length
+def test_get_length(document, length):
+    doc_length = extract.get_length(document)
+    assert doc_length
+    assert isinstance(doc_length, int)
+    assert doc_length == length
 
 @pytest.mark.parametrize(
-    "document,date_str,date",
+    "document,date",
     [
-        (load_doc("test1.md"), "4 oktober 2017 woensdag", datetime.datetime(2017, 10, 4)),
-        (load_doc("test2.md"), "30 november 2012 vrijdag", datetime.datetime(2012, 11, 30)),
+        (load_doc("test1.md"), datetime.datetime(2017, 10, 4)),
+        (load_doc("test2.md"), datetime.datetime(2012, 11, 30)),
     ]
 )
-def test_date(document, date_str, date):
-    assert document.date == date
-    assert document.date_str == date_str
+def test_get_date(document, date):
+    assert extract.get_date(document) == date
+
+@pytest.mark.parametrize(
+    "document,date_str",
+    [
+        (load_doc("test1.md"), "4 oktober 2017 woensdag"),
+        (load_doc("test2.md"), "30 november 2012 vrijdag"),
+    ]
+)
+def test_get_date_str(document, date_str):
+    assert extract.get_date_str(document) == date_str
