@@ -22,6 +22,7 @@ def test_document_init(text):
     assert doc.title is None
     assert doc.date is None
     assert doc.date_str is None
+    assert doc.byline is None
 
 def test_doc_from_file():
     doc = document.doc_from_file(get_path("test1.md"))

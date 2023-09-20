@@ -33,6 +33,10 @@ class NexisDocument(object):
     def date_str(self) -> str:
         return extract.get_date_str(self.raw_source)
 
+    @property
+    def byline(self) -> str:
+        return extract.get_byline(self.raw_source)
+
 
 def doc_from_file(file_name: Union[str, pathlib.Path]) -> NexisDocument:
     """Create a NexisDocument by loading a GFM file"""
