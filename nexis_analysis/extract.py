@@ -39,7 +39,7 @@ def get_body(raw_source):
 def get_title(raw_source):
     title = re.search(r"# \[\*{3}<u>(.+)</u>\*{3}\]", raw_source)
     if title:
-        return title.group(1).replace("</u>*** ***<u>", " ")
+        return re.sub(r"</u>.+?<u>", " ", title.group(1))
 
 
 def get_length(raw_source):

@@ -29,6 +29,7 @@ def test_get_body(doc):
     [
         (load_doc("test1.md"), "Veldslag om smartphone als mobiele bank"),
         (load_doc("test2.md"), "Schaduwbankieren valt mee, vindt Nederlandsche Bank"),
+        ("# [***<u>Stresstest</u>***](https://advance.lexis.com/api/document?collection=news&id=urn:contentItem:601X-HCR1-JC5G-10P8-00000-00&context=1516831) [***<u>CPB: coronacrisis kan financiële sector schaden</u>***](https://advance.lexis.com/api/document?collection=news&id=urn:contentItem:601X-HCR1-JC5G-10P8-00000-00&context=1516831)", "Stresstest CPB: coronacrisis kan financiële sector schaden"),
     ]
 )
 def test_get_title(document, title):
