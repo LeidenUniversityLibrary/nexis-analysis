@@ -97,6 +97,20 @@ def test_get_section(document, section):
         assert extract.get_section(document) == section
 
 @pytest.mark.parametrize(
+    "document,publication",
+    [
+        (load_doc("test1.md"), "de Volkskrant"),
+        (load_doc("test2.md"), "De Gooi- en Eemlander"),
+        ("No publication here", None),
+    ]
+)
+def test_get_publication(document, publication):
+    if publication is None:
+        assert extract.get_publication(document) is None
+    else:
+        assert extract.get_publication(document) == publication
+
+@pytest.mark.parametrize(
     "document,counts",
     [
         ("***<u>mijn KEYword</u>***", Counter({'mijn KEYword': 1})),
