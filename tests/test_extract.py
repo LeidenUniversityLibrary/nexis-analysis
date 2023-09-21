@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023-present Leiden University Libraries <beheer@library.leidenuniv.nl>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Test that metadata are correctly extracted from documents"""
+from collections import Counter
 import datetime
 from nexis_analysis import extract
 import pathlib
@@ -81,3 +82,14 @@ def test_get_byline(document, byline):
         assert extract.get_byline(document) is None
     else:
         assert extract.get_byline(document) == byline
+
+@pytest.mark.parametrize(
+    "document,counts",
+    [
+        ("***<u>mijn KEYword</u>***", Counter({'mijn KEYword': 1})),
+        (load_doc("test1.md"), Counter({'niet-bancaire': 1})),
+        (load_doc("test2.md"), Counter({'Schaduwbanken': 1, 'Schaduwbankieren': 1, 'schaduwbank': 1, 'schaduwbanken': 1, 'schaduwbankieren': 2,})),
+    ]
+)
+def test_term_in_body_counts(document, counts):
+    assert extract.get_search_terms_count(document) == counts

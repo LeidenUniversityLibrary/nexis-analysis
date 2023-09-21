@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023-present Leiden University Libraries <beheer@library.leidenuniv.nl>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Extract information from documents"""
+from collections import Counter
 import datetime
 import pathlib
 import re
@@ -64,3 +65,8 @@ def get_byline(raw_source):
     byline = re.search(r"\*\*Byline:\*\*\s(.+)\n", raw_source)
     if byline:
         return byline.group(1)
+
+def get_search_terms_count(raw_source) -> Counter:
+    body_text = get_body(raw_source)
+    terms = re.findall(r"\*{3}<u>([^<]+)</u>\*{3}", body_text) if body_text else []
+    return Counter(terms)
