@@ -44,7 +44,7 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
                 "name_hash": name_hash,
                 "source_file_name": str(item),
                 "source_file_sha256": file_hash,
-                "target_file_name": f"{name_hash}.md"
+                "target_file_name": f"{name_hash}.md",
                 "conversion_rc": conversion_result.returncode,
             })
             file_hashes[file_hash].append(str(item))
