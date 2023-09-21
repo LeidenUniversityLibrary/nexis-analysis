@@ -56,6 +56,7 @@ def test_get_length(document, length):
     [
         (load_doc("test1.md"), datetime.datetime(2017, 10, 4)),
         (load_doc("test2.md"), datetime.datetime(2012, 11, 30)),
+        ("August 5, 2022 6:43 PM GMT", datetime.datetime(2022, 8, 5)),
     ]
 )
 def test_get_date(document, date):
@@ -66,6 +67,7 @@ def test_get_date(document, date):
     [
         (load_doc("test1.md"), "4 oktober 2017 woensdag"),
         (load_doc("test2.md"), "30 november 2012 vrijdag"),
+        ("augustus 5, 2022 6:43 PM GMT", "augustus 5, 2022"),
     ]
 )
 def test_get_date_str(document, date_str):

@@ -19,6 +19,14 @@ month_by_name = {
     "oktober": 10,
     "november": 11,
     "december": 12,
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "october": 10,
 }
 
 def get_body(raw_source):
@@ -49,17 +57,24 @@ def get_length(raw_source):
 
 
 def get_date(raw_source):
-    date = re.search(r"(\d\d?) (\w+) (\d{4}) \w+dag", raw_source)
+    date = re.search(r"(?P<day>\d\d?) (?P<month>\w+) (?P<year>\d{4}) \w+dag", raw_source)
     if date:
-        year = int(date.group(3))
-        month = month_by_name.get(date.group(2).lower())
-        day = int(date.group(1))
+        year = int(date.group("year"))
+        month = month_by_name.get(date.group("month").lower())
+        day = int(date.group("day"))
         return datetime.datetime(year, month, day)
+    else:
+        date = re.search(r"(?<!\*\*\s)(?P<month>\w+)\s(?P<day>\d\d?),\s(?P<year>\d{4})", raw_source)
+        if date:
+            year = int(date.group("year"))
+            month = month_by_name.get(date.group("month").lower())
+            day = int(date.group("day"))
+            return datetime.datetime(year, month, day)
 
 def get_date_str(raw_source):
-    date = re.search(r"(\d\d? \w+ \d{4} \w+dag)", raw_source)
+    date = re.search(r"\d\d? \w+ \d{4} \w+dag|(?<!\*\*\s)\w+ \d\d?, \d{4}", raw_source)
     if date:
-        return date.group(1)
+        return date.group(0)
 
 def get_byline(raw_source):
     byline = re.search(r"\*\*Byline:\*\*\s(.+)\n", raw_source)
