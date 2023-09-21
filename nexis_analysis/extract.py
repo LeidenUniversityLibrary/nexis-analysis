@@ -24,11 +24,15 @@ def get_body(raw_source):
     try:
         body_start = """**Body**"""
         body_start_index = raw_source.index(body_start) + len(body_start)
+    except ValueError:
+        body_start_index = 0
+
+    try:
         body_end = """**Load-Date:**"""
         body_end_index = raw_source.index(body_end)
-        return raw_source[body_start_index:body_end_index].strip()
     except ValueError:
-        return None
+        body_end_index = len(raw_source)
+    return raw_source[body_start_index:body_end_index].strip()
 
 
 def get_title(raw_source):

@@ -17,7 +17,7 @@ def test_document_init(text):
     doc = document.NexisDocument(text)
 
     assert doc.raw_source == text
-    assert doc.body is None
+    assert doc.body is not None
     assert doc.length is None
     assert doc.title is None
     assert doc.date is None
@@ -27,3 +27,8 @@ def test_document_init(text):
 def test_doc_from_file():
     doc = document.doc_from_file(get_path("test1.md"))
     assert doc.body is not None
+    assert doc.length is not None
+    assert doc.title is not None
+    assert doc.date is not None
+    assert doc.date_str is not None
+    assert doc.byline is not None

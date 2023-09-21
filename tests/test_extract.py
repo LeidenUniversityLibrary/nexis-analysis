@@ -20,6 +20,7 @@ def test_get_body(doc):
     body = extract.get_body(doc)
     assert body
     assert "**Body**" not in body
+    assert "**Load-Date**" not in body
 
 
 @pytest.mark.parametrize(
