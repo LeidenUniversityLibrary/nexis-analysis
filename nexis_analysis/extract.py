@@ -72,7 +72,7 @@ def get_section(raw_source):
         return section.group(1)
 
 def get_publication(raw_source):
-    lines = raw_source.split("\n")
+    lines = raw_source.splitlines()
     if len(lines) > 4:
         return lines[4]
 
