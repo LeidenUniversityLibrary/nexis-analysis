@@ -66,6 +66,11 @@ def get_byline(raw_source):
     if byline:
         return byline.group(1)
 
+def get_section(raw_source):
+    section = re.search(r"\*\*Section:\*\*\s(.+)\n", raw_source)
+    if section:
+        return section.group(1)
+
 def get_search_terms_count(raw_source) -> Counter:
     body_text = get_body(raw_source)
     terms = re.findall(r"\*{3}<u>([^<]+)</u>\*{3}", body_text) if body_text else []

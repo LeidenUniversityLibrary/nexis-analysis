@@ -84,6 +84,19 @@ def test_get_byline(document, byline):
         assert extract.get_byline(document) == byline
 
 @pytest.mark.parametrize(
+    "document,section",
+    [
+        (load_doc("test1.md"), "Economie; Blz. 28, 29"),
+        (load_doc("test2.md"), None),
+    ]
+)
+def test_get_section(document, section):
+    if section is None:
+        assert extract.get_section(document) is None
+    else:
+        assert extract.get_section(document) == section
+
+@pytest.mark.parametrize(
     "document,counts",
     [
         ("***<u>mijn KEYword</u>***", Counter({'mijn KEYword': 1})),
