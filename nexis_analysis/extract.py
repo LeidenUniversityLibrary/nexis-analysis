@@ -57,22 +57,28 @@ def get_length(raw_source):
 
 
 def get_date(raw_source):
-    date = re.search(r"(?P<day>\d\d?) (?P<month>\w+) (?P<year>\d{4}) \w+dag", raw_source)
+    date = re.search(r"(?<!\*\*\s)\b(?P<day>\d\d?)\s(?P<month>[a-z]+?)\s(?P<year>\d{4})( \w+dag)?", raw_source, re.I)
     if date:
         year = int(date.group("year"))
         month = month_by_name.get(date.group("month").lower())
         day = int(date.group("day"))
+        if month is None:
+            print(date.group("month"), "matched as month")
+            return
         return datetime.datetime(year, month, day)
     else:
-        date = re.search(r"(?<!\*\*\s)(?P<month>\w+)\s(?P<day>\d\d?),\s(?P<year>\d{4})", raw_source)
+        date = re.search(r"(?<!\*\*\s)\b(?P<month>[a-z]+?)\s(?P<day>\d\d?),\s(?P<year>\d{4})", raw_source, re.I)
         if date:
             year = int(date.group("year"))
             month = month_by_name.get(date.group("month").lower())
             day = int(date.group("day"))
+            if month is None:
+                print(date.group("month"), "matched as month")
+                return
             return datetime.datetime(year, month, day)
 
 def get_date_str(raw_source):
-    date = re.search(r"\d\d? \w+ \d{4} \w+dag|(?<!\*\*\s)\w+ \d\d?, \d{4}", raw_source)
+    date = re.search(r"\d\d? \w+ \d{4} \w+dag|(?<!\*\*\s)\b\w+ \d\d?, \d{4}", raw_source)
     if date:
         return date.group(0)
 

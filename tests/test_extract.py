@@ -57,10 +57,17 @@ def test_get_length(document, length):
         (load_doc("test1.md"), datetime.datetime(2017, 10, 4)),
         (load_doc("test2.md"), datetime.datetime(2012, 11, 30)),
         ("August 5, 2022 6:43 PM GMT", datetime.datetime(2022, 8, 5)),
+        ("6 april 2012", datetime.datetime(2012, 4, 6)),
+        ("Het Parool\n\nNovember 3, 2000", datetime.datetime(2000, 11, 3)),
+        ("(+31) 34 379 9909", None),
+        ("**Section:** Financieel: Scorpio; N.1 van 2006, J.9; P.41; fdw", None),
     ]
 )
 def test_get_date(document, date):
-    assert extract.get_date(document) == date
+    if date is None:
+        assert extract.get_date(document) is None
+    else:
+        assert extract.get_date(document) == date
 
 @pytest.mark.parametrize(
     "document,date_str",
