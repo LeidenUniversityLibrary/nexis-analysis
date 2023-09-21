@@ -65,6 +65,16 @@ class NexisDocument(object):
     def search_terms_in_body_counts(self) -> Counter:
         return extract.get_search_terms_count(self.raw_source)
 
+    def as_dict(self) -> dict:
+        return {
+            "title": self.title_or_incipit,
+            "publication": self.publication if self.publication else "[no publication]",
+            "date": self.date.isoformat() if self.date else "[no date]",
+            "section": self.section if self.section else "[no section]",
+            "byline": self.byline if self.byline else "[no byline]",
+            "length": self.length if self.length else "[no length]",
+        }
+
 
 def doc_from_file(file_name: Union[str, pathlib.Path]) -> NexisDocument:
     """Create a NexisDocument by loading a GFM file"""
