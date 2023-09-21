@@ -5,6 +5,7 @@ from collections import Counter
 import datetime
 from . import extract
 import pathlib
+from textwrap import dedent, shorten
 from typing import Union
 
 class NexisDocument(object):
@@ -14,6 +15,12 @@ class NexisDocument(object):
         """Create a NexisDocument from GFM text"""
         self.raw_source = raw_source
 
+    def __str__(self):
+        result = """\
+        {}
+        ---""".format(self.title_or_incipit)
+        return dedent(result)
+
     @property
     def body(self) -> str:
         return extract.get_body(self.raw_source)
@@ -21,6 +28,15 @@ class NexisDocument(object):
     @property
     def title(self) -> str:
         return extract.get_title(self.raw_source)
+
+    @property
+    def title_or_incipit(self) -> str:
+        if self.title:
+            return self.title
+        elif self.body:
+            return shorten(self.body, width=60)
+        else:
+            return "[No title or body]"
 
     @property
     def length(self) -> int:

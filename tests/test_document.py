@@ -26,6 +26,8 @@ def test_document_init(text):
     assert doc.section is None
     assert doc.publication is None
     assert doc.search_terms_in_body_counts() == Counter()
+    assert doc.title_or_incipit == text
+    assert text in str(doc)
 
 def test_doc_from_file():
     doc = document.doc_from_file(get_path("test1.md"))
@@ -38,3 +40,21 @@ def test_doc_from_file():
     assert doc.section is not None
     assert doc.publication is not None
     assert len(doc.search_terms_in_body_counts()) == 1
+    assert doc.title_or_incipit == doc.title
+
+def test_empty_doc():
+    text = ""
+    doc = document.NexisDocument(text)
+
+    assert doc.raw_source == text
+    assert doc.body is not None
+    assert doc.length is None
+    assert doc.title is None
+    assert doc.date is None
+    assert doc.date_str is None
+    assert doc.byline is None
+    assert doc.section is None
+    assert doc.publication is None
+    assert doc.search_terms_in_body_counts() == Counter()
+    assert doc.title_or_incipit == "[No title or body]"
+    assert "[No title or body]" in str(doc)
