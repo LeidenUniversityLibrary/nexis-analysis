@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023-present Leiden University Libraries <beheer@library.leidenuniv.nl>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Representation of Nexis Uni documents"""
+from collections import Counter
 import datetime
 from . import extract
 import pathlib
@@ -36,6 +37,17 @@ class NexisDocument(object):
     @property
     def byline(self) -> str:
         return extract.get_byline(self.raw_source)
+
+    @property
+    def section(self) -> str:
+        return extract.get_section(self.raw_source)
+
+    @property
+    def publication(self) -> str:
+        return extract.get_publication(self.raw_source)
+
+    def search_terms_in_body_counts(self) -> Counter:
+        return extract.get_search_terms_count(self.raw_source)
 
 
 def doc_from_file(file_name: Union[str, pathlib.Path]) -> NexisDocument:

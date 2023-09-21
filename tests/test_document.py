@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2023-present Leiden University Libraries <beheer@library.leidenuniv.nl>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Test that metadata are correctly extracted from documents"""
-
-from nexis_analysis import document, extract
+from collections import Counter
+from nexis_analysis import document
 import pathlib
 import pytest
 
@@ -23,6 +23,9 @@ def test_document_init(text):
     assert doc.date is None
     assert doc.date_str is None
     assert doc.byline is None
+    assert doc.section is None
+    assert doc.publication is None
+    assert doc.search_terms_in_body_counts() == Counter()
 
 def test_doc_from_file():
     doc = document.doc_from_file(get_path("test1.md"))
@@ -32,3 +35,6 @@ def test_doc_from_file():
     assert doc.date is not None
     assert doc.date_str is not None
     assert doc.byline is not None
+    assert doc.section is not None
+    assert doc.publication is not None
+    assert len(doc.search_terms_in_body_counts()) == 1
