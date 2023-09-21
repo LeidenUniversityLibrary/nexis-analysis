@@ -4,12 +4,17 @@
 import click
 from collections import defaultdict
 import csv
+from . import document
 import hashlib
 import pathlib
 import shutil
 import subprocess
 
-@click.command("convert")
+@click.group()
+def main():
+    pass
+
+@main.command("convert")
 @click.option("-i", "--input-dir", type=click.Path(
     exists=True, dir_okay=True, path_type=pathlib.Path), required=True)
 @click.option("-o", "--output-dir", type=click.Path(
@@ -55,7 +60,24 @@ def convert_docx_to_gfm(input_dir: pathlib.Path, output_dir: pathlib.Path):
                 print("   -", name)
     print(f"Converted {len(file_hashes)} files")
 
+@main.command("analyse")
+@click.option("-i", "--input-dir", type=click.Path(
+    exists=True, dir_okay=True, path_type=pathlib.Path), required=True)
+@click.option("-o", "--output-dir", type=click.Path(
+    dir_okay=True, path_type=pathlib.Path), required=False)
+def analyse(input_dir: pathlib.Path, output_dir: pathlib.Path):
+    """Extract information from GFM documents in a directory"""
+    if output_dir is None:
+        output_dir = input_dir
+    output_file = output_dir / "analysis-results.csv"
+    header = ["document","title","publication","date","section","byline","length"]
+    with output_file.open("w", encoding="utf-8", newline="") as a_file:
+        writer = csv.DictWriter(a_file, header, extrasaction="ignore")
+        writer.writeheader()
+        for f in input_dir.glob("*.md"):
+            doc = document.doc_from_file(f)
+            writer.writerow(doc.as_dict())
 
 
 if __name__ == "__main__":
-    convert_docx_to_gfm(None, None)
+    main()

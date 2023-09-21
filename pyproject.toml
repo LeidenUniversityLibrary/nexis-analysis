@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 [project]
 name = "nexis-analysis"
 description = "Analyse data from Nexis Uni"
-version = "0.1.0"
+version = "0.2.0"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "GPL-3.0-or-later"
@@ -35,8 +35,8 @@ Documentation = "https://leidenuniversitylibrary.github.io/nexis-analysis/"
 Issues = "https://github.com/LeidenUniversityLibrary/nexis-analysis/issues"
 Source = "https://github.com/LeidenUniversityLibrary/nexis-analysis"
 
-# [project.scripts]
-
+[project.scripts]
+nexis = "nexis_analysis.cli:main"
 
 [tool.hatch.envs.test]
 dependencies = [
