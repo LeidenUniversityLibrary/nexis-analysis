@@ -76,7 +76,9 @@ def analyse(input_dir: pathlib.Path, output_dir: pathlib.Path):
         writer.writeheader()
         for f in input_dir.glob("*.md"):
             doc = document.doc_from_file(f)
-            writer.writerow(doc.as_dict())
+            doc_dict = doc.as_dict()
+            doc_dict["document"] = f
+            writer.writerow(doc_dict)
 
 
 if __name__ == "__main__":
