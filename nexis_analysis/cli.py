@@ -70,7 +70,7 @@ def analyse(input_dir: pathlib.Path, output_dir: pathlib.Path):
     if output_dir is None:
         output_dir = input_dir
     output_file = output_dir / "analysis-results.csv"
-    header = ["document","title","publication","date","section","byline","length"]
+    header = ["document","title","publication","date","load_date","section","byline","length"]
     with output_file.open("w", encoding="utf-8", newline="") as a_file:
         writer = csv.DictWriter(a_file, header, extrasaction="ignore")
         writer.writeheader()

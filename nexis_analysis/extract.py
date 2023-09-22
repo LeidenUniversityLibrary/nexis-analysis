@@ -82,6 +82,17 @@ def get_date_str(raw_source):
     if date:
         return date.group(0)
 
+def get_load_date(raw_source):
+    date = re.search(r"\*\*Load-Date:\*\*\s(?P<month>[a-z]+?)\s(?P<day>\d\d?),\s(?P<year>\d{4})", raw_source, re.I)
+    if date:
+        year = int(date.group("year"))
+        month = month_by_name.get(date.group("month").lower())
+        day = int(date.group("day"))
+        if month is None:
+            print(date.group("month"), "matched as month")
+            return
+        return datetime.datetime(year, month, day)
+
 def get_byline(raw_source):
     byline = re.search(r"\*\*Byline:\*\*\s(.+)\n", raw_source)
     if byline:

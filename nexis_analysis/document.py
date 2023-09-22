@@ -47,6 +47,10 @@ class NexisDocument(object):
         return extract.get_date(self.raw_source)
 
     @property
+    def load_date(self) -> datetime.datetime:
+        return extract.get_load_date(self.raw_source)
+
+    @property
     def date_str(self) -> str:
         return extract.get_date_str(self.raw_source)
 
@@ -73,6 +77,7 @@ class NexisDocument(object):
             "title": self.title_or_incipit,
             "publication": self.publication if self.publication else "[no publication]",
             "date": self.date.isoformat() if self.date else "[no date]",
+            "load_date": self.load_date.isoformat() if self.load_date else "[no date]",
             "section": self.section if self.section else "[no section]",
             "byline": self.byline if self.byline else "[no byline]",
             "length": self.length if self.length else "[no length]",
