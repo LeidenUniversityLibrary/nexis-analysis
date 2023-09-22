@@ -28,6 +28,7 @@ def test_document_init(text):
     assert doc.search_terms_in_body_counts() == Counter()
     assert doc.title_or_incipit == text
     assert text in str(doc)
+    assert doc.as_dict()
 
 def test_doc_from_file():
     doc = document.doc_from_file(get_path("test1.md"))
