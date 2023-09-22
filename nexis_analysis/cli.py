@@ -77,7 +77,7 @@ def analyse(input_dir: pathlib.Path, output_dir: pathlib.Path):
         for f in input_dir.glob("*.md"):
             doc = document.doc_from_file(f)
             doc_dict = doc.as_dict()
-            doc_dict["document"] = f
+            doc_dict["document"] = f.name
             writer.writerow(doc_dict)
 
 
