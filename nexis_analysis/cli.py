@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Analyse documents retrieved from Nexis Uni"""
 import click
-from collections import defaultdict
+from collections import defaultdict, Counter
 import csv
 from . import document
 import hashlib
@@ -79,6 +79,34 @@ def analyse(input_dir: pathlib.Path, output_dir: pathlib.Path):
             doc_dict = doc.as_dict()
             doc_dict["document"] = f.name
             writer.writerow(doc_dict)
+
+@main.command("terms")
+@click.option("-i", "--input-dir", type=click.Path(
+    exists=True, dir_okay=True, path_type=pathlib.Path), required=True)
+@click.option("-o", "--output-dir", type=click.Path(
+    dir_okay=True, path_type=pathlib.Path), required=False)
+def terms(input_dir: pathlib.Path, output_dir: pathlib.Path):
+    """Extract marked-up search terms or phrases from GFM documents in a directory"""
+    if output_dir is None:
+        output_dir = input_dir
+    output_file = output_dir / "terms-results.csv"
+    all_terms = Counter()
+    all_counters = dict()
+    for f in input_dir.glob("*.md"):
+        doc = document.doc_from_file(f)
+        doc_terms = doc.search_terms_in_body_counts_lower()
+        all_terms += doc_terms
+        all_counters[f] = doc_terms
+    header = ["document"] + list(all_terms.keys())
+    print(header)
+    with output_file.open("w", encoding="utf-8", newline="") as a_file:
+        writer = csv.DictWriter(a_file, header, extrasaction="ignore")
+        writer.writeheader()
+        for f in all_counters:
+            counter = all_counters[f]
+            counter_dict = dict(counter)
+            counter_dict["document"] = f.name
+            writer.writerow(counter_dict)
 
 
 if __name__ == "__main__":
