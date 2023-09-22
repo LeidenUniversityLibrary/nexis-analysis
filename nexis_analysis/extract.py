@@ -97,7 +97,9 @@ def get_publication(raw_source):
     if len(lines) > 4:
         return lines[4]
 
-def get_search_terms_count(raw_source) -> Counter:
+def get_search_terms_count(raw_source, case_sensitive=True) -> Counter:
     body_text = get_body(raw_source)
     terms = re.findall(r"\*{3}<u>([^<]+)</u>\*{3}", body_text) if body_text else []
+    if not case_sensitive:
+        terms = [t.lower() for t in terms]
     return Counter(terms)

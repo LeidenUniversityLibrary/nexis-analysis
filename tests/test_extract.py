@@ -130,3 +130,14 @@ def test_get_publication(document, publication):
 )
 def test_term_in_body_counts(document, counts):
     assert extract.get_search_terms_count(document) == counts
+
+@pytest.mark.parametrize(
+    "document,counts",
+    [
+        ("***<u>mijn KEYword</u>***", Counter({'mijn keyword': 1})),
+        (load_doc("test1.md"), Counter({'niet-bancaire': 1})),
+        (load_doc("test2.md"), Counter({'schaduwbank': 1, 'schaduwbanken': 2, 'schaduwbankieren': 3,})),
+    ]
+)
+def test_term_in_body_counts_lower(document, counts):
+    assert extract.get_search_terms_count(document, False) == counts

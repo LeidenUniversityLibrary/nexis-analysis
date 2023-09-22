@@ -65,6 +65,9 @@ class NexisDocument(object):
     def search_terms_in_body_counts(self) -> Counter:
         return extract.get_search_terms_count(self.raw_source)
 
+    def search_terms_in_body_counts_lower(self) -> Counter:
+        return extract.get_search_terms_count(self.raw_source, False)
+
     def as_dict(self) -> dict:
         return {
             "title": self.title_or_incipit,

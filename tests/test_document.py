@@ -57,5 +57,6 @@ def test_empty_doc():
     assert doc.section is None
     assert doc.publication is None
     assert doc.search_terms_in_body_counts() == Counter()
+    assert doc.search_terms_in_body_counts_lower() == Counter()
     assert doc.title_or_incipit == "[No title or body]"
     assert "[No title or body]" in str(doc)
