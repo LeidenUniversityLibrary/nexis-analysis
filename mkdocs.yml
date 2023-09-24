@@ -26,3 +26,7 @@ markdown_extensions:
 
 nav:
   - 'index.md'
+  - 'install.md'
+  - 'docx-to-gfm.md'
+  - 'extract-metadata.md'
+  - 'extract-terms.md'
